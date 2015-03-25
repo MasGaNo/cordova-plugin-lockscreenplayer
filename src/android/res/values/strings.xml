@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">" LockScreenPlayerPlugin"</string>
+    <string name="activity_name">" LockScreenPlayerPlugin"</string>
+    <string name="launcher_name">" LockScreenPlayerPlugin"</string>
 </resources>
