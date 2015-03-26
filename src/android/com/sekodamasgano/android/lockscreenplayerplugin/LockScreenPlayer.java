@@ -51,6 +51,13 @@ public class LockScreenPlayer extends CordovaPlugin {
 
     private static final String TAG = "LockScreenPlayerPlugin";
 
+    private static LockScreenPlayer instance;
+
+    public static LockScreenPlayer GetInstance()
+    {
+        return instance;
+    }
+
     @Override
     protected void pluginInitialize() {
         Log.d(TAG, "PluginInitialize");
@@ -95,6 +102,8 @@ public class LockScreenPlayer extends CordovaPlugin {
                 new IntentFilter(UPDATE_PLAYBACK_SERVICE_ACTION_PREV));
         cordovaActivity.registerReceiver(this.notificationActionReceiver,
                 new IntentFilter(UPDATE_PLAYBACK_SERVICE_ACTION_NEXT));
+
+        instance = this;
     }
 
     @Override
@@ -216,7 +225,17 @@ public class LockScreenPlayer extends CordovaPlugin {
                 //send event notification next;
             } else {
                 Log.e(TAG, "Unrecognized action: '" + action + "'");
+                return;
             }
+            JSONObject event = new JSONObject();
+            try
+            {
+                event.put("type", action);
+            } catch(JSONException e) {
+                return;
+            }
+
+            LockScreenPlayer.GetInstance().webView.loadUrl("javascript:cordova.plugins.LockScreenPlayer._setEvent(" + event.toString() + ")");
         }
     };
 
