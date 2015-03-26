@@ -5,70 +5,76 @@
         id="com.sekodamasgano.cordova.plugin.lockscreenplayer"
         version="0.0.1">
 
-    <name>LockScreenPlayer</name>
+  <name>LockScreenPlayer</name>
 
-    <description>Todo</description>
+  <description>Todo</description>
 
-    <repo>https://github.com/MasGaNo/cordova-plugin-lockscreenplayer.git</repo>
+  <repo>https://github.com/MasGaNo/cordova-plugin-lockscreenplayer.git</repo>
 
-    <keywords>player, lock screen, mobile</keywords>
+  <keywords>player, lock screen, mobile</keywords>
 
-    <license>Apache 2.0</license>
+  <license>Apache 2.0</license>
 
-    <author>Sekoda MasGaNo</author>
+  <author>Sekoda MasGaNo</author>
 
-    <!-- cordova -->
-    <engines>
-        <engine name="cordova" version=">=3.0.0" />
-    </engines>
+  <!-- cordova -->
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+  </engines>
 
-    <!-- dependencies -->
-    <dependency id="org.apache.cordova.device" />
+  <!-- dependencies -->
+  <dependency id="org.apache.cordova.device" />
 
-    <!-- info -->
-    <info>
-		This is still in development and testing.
-		I plan to support iOS, Android, WP8 and Windows. For others platform, I don't have any device for test directly.
-		So if somebody needs other one, your support is needed.
+  <!-- info -->
+  <info>
+    This is still in development and testing.
+    I plan to support iOS, Android, WP8 and Windows. For others platform, I don't have any device for test directly.
+    So if somebody needs other one, your support is needed.
 
-        Thank you!
-    </info>
+    Thank you!
+  </info>
 
-    <!-- js -->
-    <js-module src="www/LockScreenPlayer.js" name="LockScreenPlayer">
-        <clobbers target="cordova.plugins" />
-        <clobbers target="plugins" />
-    </js-module>
+  <!-- js -->
+  <js-module src="www/LockScreenPlayer.js" name="LockScreenPlayer">
+    <clobbers target="cordova.plugins" />
+    <clobbers target="plugins" />
+  </js-module>
 
-    <!-- android -->
-    <platform name="android">
+  <!-- android -->
+  <platform name="android">
 
-		<source-file
+    <source-file
 			src="src/android/libs/support-v4-19.0.0.jar" target-dir="libs/" />
-        <source-file
-            src="src/android/com/sekodamasgano/android/lockscreenplayerplugin/LockScreenPlayer.java"
-            target-dir="src/com/sekodamasgano/android/lockscreenplayerplugin" />
+    <source-file
+        src="src/android/com/sekodamasgano/android/lockscreenplayerplugin/LockScreenPlayer.java"
+        target-dir="src/com/sekodamasgano/android/lockscreenplayerplugin" />
 
-      <config-file target="res/xml/config.xml" parent="/*">
-        <feature name="LockScreenPlayer">
-          <param name="android-package" value="com.sekodamasgano.android.lockscreenplayerplugin.LockScreenPlayer" />
-        </feature>
-      </config-file>
-      
-		    <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
-		
-		    <resource-file src="src/android/res/drawable-hdpi/ic_notification_icon.png" target="res/drawable-hdpi/ic_notification_icon.png" />
-		    <resource-file src="src/android/res/drawable-hdpi/no_image.png" target="res/drawable-hdpi/no_image.png" />
-		
-		    <resource-file src="src/android/res/drawable-mdpi/ic_notification_icon.png" target="res/drawable-mdpi/ic_notification_icon.png" />
-		    <resource-file src="src/android/res/drawable-mdpi/no_image.png" target="res/drawable-mdpi/no_image.png" />
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="LockScreenPlayer">
+        <param name="android-package" value="com.sekodamasgano.android.lockscreenplayerplugin.LockScreenPlayer" />
+      </feature>
+    </config-file>
 
-		    <resource-file src="src/android/res/drawable-xhdpi/ic_notification_icon.png" target="res/drawable-xhdpi/ic_notification_icon.png" />
-		    <resource-file src="src/android/res/drawable-xhdpi/no_image.png" target="res/drawable-xhdpi/no_image.png" />
+    <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
 
-		    <resource-file src="src/android/res/drawable-xxhdpi/ic_notification_icon.png" target="res/drawable-xxhdpi/ic_notification_icon.png" />
-		    <resource-file src="src/android/res/drawable-xxhdpi/no_image.png" target="res/drawable-xxhdpi/no_image.png" />
+    <resource-file src="src/android/res/drawable-hdpi/ic_notification_icon.png" target="res/drawable-hdpi/ic_notification_icon.png" />
+    <resource-file src="src/android/res/drawable-hdpi/no_image.png" target="res/drawable-hdpi/no_image.png" />
 
-    </platform>
+    <resource-file src="src/android/res/drawable-mdpi/ic_notification_icon.png" target="res/drawable-mdpi/ic_notification_icon.png" />
+    <resource-file src="src/android/res/drawable-mdpi/no_image.png" target="res/drawable-mdpi/no_image.png" />
+
+    <resource-file src="src/android/res/drawable-xhdpi/ic_notification_icon.png" target="res/drawable-xhdpi/ic_notification_icon.png" />
+    <resource-file src="src/android/res/drawable-xhdpi/no_image.png" target="res/drawable-xhdpi/no_image.png" />
+
+    <resource-file src="src/android/res/drawable-xxhdpi/ic_notification_icon.png" target="res/drawable-xxhdpi/ic_notification_icon.png" />
+    <resource-file src="src/android/res/drawable-xxhdpi/no_image.png" target="res/drawable-xxhdpi/no_image.png" />
+
+  </platform>
+  
+  <platform name="windows">
+    <js-module src="src/windows8/LockScreenPlayerProxy.js" name="LockScreenPlayerProxy">
+      <merges target="" />
+    </js-module>
+  </platform>
 
 </plugin>
