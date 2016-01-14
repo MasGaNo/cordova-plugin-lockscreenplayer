@@ -124,7 +124,8 @@ public class LockScreenPlayer extends CordovaPlugin {
                         arg_object.getString("artistName"),
                         arg_object.getString("albumName"),
                         arg_object.getString("cover"),
-                        arg_object.getBoolean("isPlaying")
+                        arg_object.getBoolean("isPlaying"),
+                        arg_object.getBoolean("disablePrevNext")
                 );
             } else if (ACTION_REMOVE_PLAYER.equals(action)) {
 
@@ -147,7 +148,7 @@ public class LockScreenPlayer extends CordovaPlugin {
         }
     }
 
-    private void setInfos(String trackName, String artistName, String albumName, String cover, Boolean isPlaying)
+    private void setInfos(String trackName, String artistName, String albumName, String cover, Boolean isPlaying, Boolean disablePrevNext)
     {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         //NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -166,13 +167,15 @@ public class LockScreenPlayer extends CordovaPlugin {
                 trackName + " - " + artistName,
                 imageCover,
                 isPlaying,
-                inboxStyle));
+                inboxStyle,
+                disablePrevNext));
     }
 
 
     private Notification buildNotification(String title, String content,
                                            Bitmap image, Boolean isPlaying,
-                                           NotificationCompat.InboxStyle style) {
+                                           NotificationCompat.InboxStyle style,
+                                           Boolean disablePrevNext) {
         // Build intent with track list and current playing track
         //this.notificationIntent.putExtra(EXTRA_TRACK_TO_PLAY_INDEX, this.currentTrackIndex);
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this.cordova.getActivity(), PLAYBACK_SERVICE_REQUEST_CODE,
@@ -196,7 +199,11 @@ public class LockScreenPlayer extends CordovaPlugin {
 
         //if (playbackMode == PlayerActivity.Mode.TRACK)
         // Set action according to current state and playing track index
-        notificationBuilder.addAction(android.R.drawable.ic_media_previous, "Prev", this.prevPlaybackPendingIntent);
+        if (disablePrevNext) {
+            notificationBuilder.addAction(android.R.drawable.ic_lock_lock, "Prev", null); 
+        } else {
+            notificationBuilder.addAction(android.R.drawable.ic_media_previous, "Prev", this.prevPlaybackPendingIntent);  
+        }
         // Set play/pause action according to state
         if (isPlaying) {
             notificationBuilder.addAction(android.R.drawable.ic_media_pause, "Pause", this.pausePlaybackPendingIntent);
@@ -204,7 +211,12 @@ public class LockScreenPlayer extends CordovaPlugin {
             notificationBuilder.addAction(android.R.drawable.ic_media_play, "Play", this.startPlaybackPendingIntent);
         }
         // Set action according to current state and playing track index
-        notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", this.nextPlaybackPendingIntent);
+        if (disablePrevNext) {
+            notificationBuilder.addAction(android.R.drawable.ic_lock_lock, "Next", null);
+        } else {
+            notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", this.nextPlaybackPendingIntent);
+        }
+        
 
         return notificationBuilder.build();
     }
