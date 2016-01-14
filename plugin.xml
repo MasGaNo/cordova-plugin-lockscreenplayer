@@ -43,8 +43,8 @@
   <!-- android -->
   <platform name="android">
 
-    <source-file
-			src="src/android/libs/support-v4-19.0.0.jar" target-dir="libs/" />
+    <!-- <source-file
+			src="src/android/libs/support-v4-19.0.0.jar" target-dir="libs/" /> -->
     <source-file
         src="src/android/com/sekodamasgano/android/lockscreenplayerplugin/LockScreenPlayer.java"
         target-dir="src/com/sekodamasgano/android/lockscreenplayerplugin" />
@@ -55,7 +55,7 @@
       </feature>
     </config-file>
 
-    <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />
+    <!-- <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />-->
 
     <resource-file src="src/android/res/drawable-hdpi/ic_notification_icon.png" target="res/drawable-hdpi/ic_notification_icon.png" />
     <resource-file src="src/android/res/drawable-hdpi/no_image.png" target="res/drawable-hdpi/no_image.png" />
