@@ -95,7 +95,7 @@ function reloadMediaInfos2(track) {
     systemMediaTransport.isEnabled = true;
 
     systemMediaTransport.displayUpdater.clearAll();
-    if (cover in track && track.cover.length > 0) {
+    if ('cover' in track && track.cover.length > 0) {
         systemMediaTransport.displayUpdater.thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.createFromUri(
             new Windows.Foundation.Uri('data:image/jpeg;base64,' + track.cover)
         );
@@ -125,7 +125,6 @@ function reloadMediaInfos1(track) {
         // TODO: find a way to set a image data base64
         //var coverUri = new Windows.Foundation.Uri('data:image/jpeg;base64,' + track.cover);
         //mediaControls.albumArt = coverUri;
-
     }
     mediaControls.artistName = track.artistName;
     mediaControls.isPlaying = track.isPlaying;

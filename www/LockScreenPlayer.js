@@ -10,9 +10,9 @@ function checkEvent(event) {// add namespace ?
 
 exports.LockScreenPlayer = {
     updateInfos: function (infos, successCallback, errorCallback) {
-        console.group("LockScreenPlayer::updateInfos");
-        console.log(infos);
-        console.groupEnd();
+        //console.group("LockScreenPlayer::updateInfos");
+        //console.log(infos);
+        //console.groupEnd();
 
 		cordova.exec(
 			successCallback,
@@ -90,6 +90,7 @@ exports.LockScreenPlayer = {
         }
     },
     _setEvent: function (event) {
+        //console.log(event);
         this.trigger(event.type);
     }
 };

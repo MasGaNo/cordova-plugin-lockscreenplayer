@@ -55,7 +55,7 @@
       </feature>
     </config-file>
 
-    <!-- <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" />-->
+    <!-- <resource-file src="src/android/res/values/strings.xml" target="res/values/strings.xml" /> -->
 
     <resource-file src="src/android/res/drawable-hdpi/ic_notification_icon.png" target="res/drawable-hdpi/ic_notification_icon.png" />
     <resource-file src="src/android/res/drawable-hdpi/no_image.png" target="res/drawable-hdpi/no_image.png" />
@@ -69,12 +69,35 @@
     <resource-file src="src/android/res/drawable-xxhdpi/ic_notification_icon.png" target="res/drawable-xxhdpi/ic_notification_icon.png" />
     <resource-file src="src/android/res/drawable-xxhdpi/no_image.png" target="res/drawable-xxhdpi/no_image.png" />
 
+	<framework src="com.android.support:support-v4:+" />
+	
   </platform>
   
   <platform name="windows">
     <js-module src="src/windows8/LockScreenPlayerProxy.js" name="LockScreenPlayerProxy">
       <merges target="" />
     </js-module>
+  </platform>
+  
+  <platform name="wp8">
+    <config-file target="config.xml" parent="/*">
+      <feature name="LockScreenPlayer">
+        <param name="wp-package" value="LockScreenPlayer" />
+      </feature>
+    </config-file>
+  
+    <source-file src="src/wp8/LockScreenPlayer.cs" />
+  </platform>
+  
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="LockScreenPlayer">
+        <param name="ios-package" value="LockScreenPlayer" />
+      </feature>
+    </config-file>
+    <header-file src="src/ios/LockScreenPlayer.h" />
+    <source-file src="src/ios/LockScreenPlayer.m" />
+    <framework src="MediaPlayer.framework" />
   </platform>
 
 </plugin>

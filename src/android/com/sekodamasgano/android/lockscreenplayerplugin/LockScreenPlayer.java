@@ -66,6 +66,8 @@ public class LockScreenPlayer extends CordovaPlugin {
 
         this.notificationManager = (NotificationManager) cordovaActivity.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+
         // Create base intent to launch activity from notification
         notificationIntent = new Intent(cordovaActivity, cordovaActivity.getClass());
         notificationIntent.putExtra(EXTRA_FROM_NOTIFICATION, true);
@@ -194,8 +196,9 @@ public class LockScreenPlayer extends CordovaPlugin {
                 .setContentIntent(notificationPendingIntent)
                 .setLargeIcon(image)
                 .setStyle(style)
-                .setOngoing(true)
-                .setPriority(Notification.PRIORITY_MAX);
+                //.setOngoing(true)
+                .setPriority(Notification.PRIORITY_DEFAULT);
+                //.setPriority(Notification.PRIORITY_MAX);
 
         //if (playbackMode == PlayerActivity.Mode.TRACK)
         // Set action according to current state and playing track index
@@ -208,8 +211,6 @@ public class LockScreenPlayer extends CordovaPlugin {
         }
         // Set action according to current state and playing track index
         notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", (disablePrevNext) ? null : this.nextPlaybackPendingIntent);
-        
-        
 
         return notificationBuilder.build();
     }
@@ -256,6 +257,33 @@ public class LockScreenPlayer extends CordovaPlugin {
     {
         Resources activityRes = this.cordova.getActivity().getResources();
         return activityRes.getIdentifier(resourceName, "drawable", this.cordova.getActivity().getPackageName());
+    }
+
+    /**
+     * Called when the activity receives a new intent.
+     */
+    @Override
+    public void onNewIntent(Intent intent) {
+        this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+    }
+
+    /**
+     * The final call you receive before your activity is destroyed.
+     */
+    @Override
+    public void onDestroy() {
+        this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+    }
+
+    /**
+     * Called when the WebView does a top-level navigation or refreshes.
+     *
+     * Plugins should stop any long-running processes and clean up internal state.
+     *
+     * Does nothing by default.
+     */
+    @Override
+    public void onReset() {
     }
 
 }
