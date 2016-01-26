@@ -196,9 +196,9 @@ public class LockScreenPlayer extends CordovaPlugin {
                 .setContentIntent(notificationPendingIntent)
                 .setLargeIcon(image)
                 .setStyle(style)
-                //.setOngoing(true)
-                .setPriority(Notification.PRIORITY_DEFAULT);
-                //.setPriority(Notification.PRIORITY_MAX);
+                .setOngoing(true)
+                //.setPriority(Notification.PRIORITY_DEFAULT);
+                .setPriority(Notification.PRIORITY_MAX);
 
         //if (playbackMode == PlayerActivity.Mode.TRACK)
         // Set action according to current state and playing track index
