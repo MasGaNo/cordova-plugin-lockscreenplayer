@@ -12,7 +12,7 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
 
@@ -40,6 +40,7 @@ public class LockScreenPlayer extends CordovaPlugin {
     public static final String UPDATE_PLAYBACK_SERVICE_ACTION_PLAY = "ActionPlay";
     public static final String UPDATE_PLAYBACK_SERVICE_ACTION_PREV = "ActionPrev";
     public static final String UPDATE_PLAYBACK_SERVICE_ACTION_NEXT = "ActionNext";
+    public static final String UPDATE_PLAYBACK_SERVICE_ACTION_STOP = "ActionStop";
 
     private NotificationManager notificationManager;
     private Intent notificationIntent;
@@ -47,6 +48,7 @@ public class LockScreenPlayer extends CordovaPlugin {
     private PendingIntent startPlaybackPendingIntent;
     private PendingIntent prevPlaybackPendingIntent;
     private PendingIntent nextPlaybackPendingIntent;
+    private PendingIntent stopPlaybackPendingIntent;
 
 
     private static final String TAG = "LockScreenPlayerPlugin";
@@ -94,6 +96,11 @@ public class LockScreenPlayer extends CordovaPlugin {
         this.nextPlaybackPendingIntent = PendingIntent.getBroadcast(cordovaActivity,
                 UPDATE_PLAYBACK_SERVICE_REQUEST_CODE, updatePlaybackIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
+        // Stop player
+        updatePlaybackIntent.setAction(UPDATE_PLAYBACK_SERVICE_ACTION_STOP);
+        this.stopPlaybackPendingIntent = PendingIntent.getBroadcast(cordovaActivity,
+                UPDATE_PLAYBACK_SERVICE_REQUEST_CODE, updatePlaybackIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Register receiver for Notification actions
         cordovaActivity.registerReceiver(this.notificationActionReceiver,
@@ -104,6 +111,8 @@ public class LockScreenPlayer extends CordovaPlugin {
                 new IntentFilter(UPDATE_PLAYBACK_SERVICE_ACTION_PREV));
         cordovaActivity.registerReceiver(this.notificationActionReceiver,
                 new IntentFilter(UPDATE_PLAYBACK_SERVICE_ACTION_NEXT));
+        cordovaActivity.registerReceiver(this.notificationActionReceiver,
+                new IntentFilter(UPDATE_PLAYBACK_SERVICE_ACTION_STOP));
 
         instance = this;
     }
@@ -152,12 +161,12 @@ public class LockScreenPlayer extends CordovaPlugin {
 
     private void setInfos(String trackName, String artistName, String albumName, String cover, Boolean isPlaying, Boolean disablePrevNext)
     {
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+		Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
         //NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(trackName)
                 .addLine(artistName)
                 .addLine(albumName);
-
+		
         Bitmap imageCover = null;
         if (cover != null && cover.length() > 0) {
             byte[] imageAsBytes = Base64.decode(cover, Base64.DEFAULT);
@@ -176,7 +185,8 @@ public class LockScreenPlayer extends CordovaPlugin {
 
     private Notification buildNotification(String title, String content,
                                            Bitmap image, Boolean isPlaying,
-                                           NotificationCompat.InboxStyle style,
+                                           //NotificationCompat.InboxStyle style,
+                                           Notification.InboxStyle style,
                                            Boolean disablePrevNext) {
         // Build intent with track list and current playing track
         //this.notificationIntent.putExtra(EXTRA_TRACK_TO_PLAY_INDEX, this.currentTrackIndex);
@@ -187,7 +197,8 @@ public class LockScreenPlayer extends CordovaPlugin {
             image = BitmapFactory.decodeResource(this.cordova.getActivity().getResources(), getResourceId("no_image"));
         }
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this.cordova.getActivity());
+        //NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this.cordova.getActivity());
+        Notification.Builder notificationBuilder = new Notification.Builder(this.cordova.getActivity());
 
         notificationBuilder.setSmallIcon(getResourceId("ic_notification_icon"))
                 .setTicker(content)
@@ -196,23 +207,25 @@ public class LockScreenPlayer extends CordovaPlugin {
                 .setContentIntent(notificationPendingIntent)
                 .setLargeIcon(image)
                 .setStyle(style)
-                //.setOngoing(true)
-                .setPriority(Notification.PRIORITY_DEFAULT);
-                //.setPriority(Notification.PRIORITY_MAX);
+                .setOngoing(true)
+                //.setCategory(Notification.CATEGORY_TRANSPORT)
+                //.setPriority(Notification.PRIORITY_DEFAULT);
+                .setPriority(Notification.PRIORITY_MAX);
 
         //if (playbackMode == PlayerActivity.Mode.TRACK)
         // Set action according to current state and playing track index
-        notificationBuilder.addAction(android.R.drawable.ic_media_previous, "Prev", (disablePrevNext) ? null : this.prevPlaybackPendingIntent);
+        //notificationBuilder.addAction(android.R.drawable.ic_media_previous, "Prev", (disablePrevNext) ? null : this.prevPlaybackPendingIntent);
+        // Set action according to current state and playing track index
+        notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", (disablePrevNext) ? null : this.nextPlaybackPendingIntent);
         // Set play/pause action according to state
         if (isPlaying) {
             notificationBuilder.addAction(android.R.drawable.ic_media_pause, "Pause", this.pausePlaybackPendingIntent);
         } else {
             notificationBuilder.addAction(android.R.drawable.ic_media_play, "Play", this.startPlaybackPendingIntent);
         }
-        // Set action according to current state and playing track index
-        notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", (disablePrevNext) ? null : this.nextPlaybackPendingIntent);
+        notificationBuilder.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", this.stopPlaybackPendingIntent);
 
-        return notificationBuilder.build();
+		return notificationBuilder.build();
     }
 
     private BroadcastReceiver notificationActionReceiver = new BroadcastReceiver() {
@@ -228,6 +241,8 @@ public class LockScreenPlayer extends CordovaPlugin {
             } else if (action.equals(LockScreenPlayer.UPDATE_PLAYBACK_SERVICE_ACTION_PREV)) {
                 //send event notification prev;
             } else if (action.equals(LockScreenPlayer.UPDATE_PLAYBACK_SERVICE_ACTION_NEXT)) {
+                //send event notification next;
+            } else if (action.equals(LockScreenPlayer.UPDATE_PLAYBACK_SERVICE_ACTION_STOP)) {
                 //send event notification next;
             } else {
                 Log.e(TAG, "Unrecognized action: '" + action + "'");
