@@ -95,13 +95,13 @@ var LockScreenPlayer = {
     }
 };
 
-LockScreenPlayer.install = function () {
+function install() {
     if (!window.plugins) {
         window.plugins = {};
     }
 
-    window.plugins.LockScreenPlayer = new SocialSharing();
+    window.plugins.LockScreenPlayer = LockScreenPlayer;
     return window.plugins.LockScreenPlayer;
 };
 
-cordova.addConstructor(LockScreenPlayer.install);
+cordova.addConstructor(install);
