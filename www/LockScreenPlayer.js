@@ -8,7 +8,7 @@ function checkEvent(event) {// add namespace ?
     eventCallbackList[event] = [];
 }
 
-exports.LockScreenPlayer = {
+var LockScreenPlayer = {
     updateInfos: function (infos, successCallback, errorCallback) {
         //console.group("LockScreenPlayer::updateInfos");
         //console.log(infos);
@@ -94,3 +94,14 @@ exports.LockScreenPlayer = {
         this.trigger(event.type);
     }
 };
+
+LockScreenPlayer.install = function () {
+    if (!window.plugins) {
+        window.plugins = {};
+    }
+
+    window.plugins.LockScreenPlayer = new SocialSharing();
+    return window.plugins.LockScreenPlayer;
+};
+
+cordova.addConstructor(LockScreenPlayer.install);

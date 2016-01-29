@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="com.sekodamasgano.cordova.plugin.lockscreenplayer"
-        version="0.0.2">
+        version="0.0.3">
 
   <name>LockScreenPlayer</name>
 
@@ -36,8 +36,8 @@
 
   <!-- js -->
   <js-module src="www/LockScreenPlayer.js" name="LockScreenPlayer">
-    <clobbers target="cordova.plugins" />
-    <clobbers target="plugins" />
+    <clobbers target="cordova.plugins.LockScreenPlayer" />
+    <clobbers target="plugins.LockScreenPlayer" />
   </js-module>
 
   <!-- android -->
