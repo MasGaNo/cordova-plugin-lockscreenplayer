@@ -256,7 +256,7 @@ public class LockScreenPlayer extends CordovaPlugin {
                 return;
             }
 
-            LockScreenPlayer.GetInstance().webView.loadUrl("javascript:cordova.plugins.LockScreenPlayer._setEvent(" + event.toString() + ")");
+            LockScreenPlayer.GetInstance().webView.loadUrl("javascript:window.plugins.LockScreenPlayer._setEvent(" + event.toString() + ")");
         }
     };
 
