@@ -161,12 +161,12 @@ public class LockScreenPlayer extends CordovaPlugin {
 
     private void setInfos(String trackName, String artistName, String albumName, String cover, Boolean isPlaying, Boolean disablePrevNext)
     {
-		Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
+        Notification.InboxStyle inboxStyle = new Notification.InboxStyle();
         //NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(trackName)
                 .addLine(artistName)
                 .addLine(albumName);
-		
+        
         Bitmap imageCover = null;
         if (cover != null && cover.length() > 0) {
             byte[] imageAsBytes = Base64.decode(cover, Base64.DEFAULT);
@@ -185,11 +185,11 @@ public class LockScreenPlayer extends CordovaPlugin {
 
     private Notification buildNotification(String title, String content,
                                            Bitmap image, Boolean isPlaying,
-                                           //NotificationCompat.InboxStyle style,
+                                           // NotificationCompat.InboxStyle style,
                                            Notification.InboxStyle style,
                                            Boolean disablePrevNext) {
         // Build intent with track list and current playing track
-        //this.notificationIntent.putExtra(EXTRA_TRACK_TO_PLAY_INDEX, this.currentTrackIndex);
+        // this.notificationIntent.putExtra(EXTRA_TRACK_TO_PLAY_INDEX, this.currentTrackIndex);
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this.cordova.getActivity(), PLAYBACK_SERVICE_REQUEST_CODE,
                 notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -206,26 +206,26 @@ public class LockScreenPlayer extends CordovaPlugin {
                 .setContentText(content)
                 .setContentIntent(notificationPendingIntent)
                 .setLargeIcon(image)
-                .setStyle(style)
-                .setOngoing(true)
+                .setStyle(style);
+                //.setOngoing(true)
                 //.setCategory(Notification.CATEGORY_TRANSPORT)
                 //.setPriority(Notification.PRIORITY_DEFAULT);
-                .setPriority(Notification.PRIORITY_MAX);
+                //.setPriority(Notification.PRIORITY_MAX);
 
         //if (playbackMode == PlayerActivity.Mode.TRACK)
         // Set action according to current state and playing track index
-        //notificationBuilder.addAction(android.R.drawable.ic_media_previous, "Prev", (disablePrevNext) ? null : this.prevPlaybackPendingIntent);
-        // Set action according to current state and playing track index
-        notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", (disablePrevNext) ? null : this.nextPlaybackPendingIntent);
+        notificationBuilder.addAction(android.R.drawable.ic_media_previous, "Prev", (disablePrevNext) ? null : this.prevPlaybackPendingIntent);
         // Set play/pause action according to state
         if (isPlaying) {
             notificationBuilder.addAction(android.R.drawable.ic_media_pause, "Pause", this.pausePlaybackPendingIntent);
         } else {
             notificationBuilder.addAction(android.R.drawable.ic_media_play, "Play", this.startPlaybackPendingIntent);
         }
-        notificationBuilder.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", this.stopPlaybackPendingIntent);
-
-		return notificationBuilder.build();
+        // Set action according to current state and playing track index
+        notificationBuilder.addAction(android.R.drawable.ic_media_next, "Next", (disablePrevNext) ? null : this.nextPlaybackPendingIntent);
+        // notificationBuilder.addAction(android.R.drawable.ic_menu_close_clear_cancel, "Stop", this.stopPlaybackPendingIntent);
+        
+        return notificationBuilder.build();
     }
 
     private BroadcastReceiver notificationActionReceiver = new BroadcastReceiver() {
