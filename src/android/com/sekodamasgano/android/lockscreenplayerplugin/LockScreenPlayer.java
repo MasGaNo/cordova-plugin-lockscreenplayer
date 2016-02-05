@@ -49,7 +49,7 @@ public class LockScreenPlayer extends CordovaPlugin {
     private PendingIntent prevPlaybackPendingIntent;
     private PendingIntent nextPlaybackPendingIntent;
     private PendingIntent stopPlaybackPendingIntent;
-
+    private String notificationTag;
 
     private static final String TAG = "LockScreenPlayerPlugin";
 
@@ -67,8 +67,8 @@ public class LockScreenPlayer extends CordovaPlugin {
         Activity cordovaActivity = this.cordova.getActivity();
 
         this.notificationManager = (NotificationManager) cordovaActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+        this.notificationTag = cordovaActivity.getPackageName();
+        this.notificationManager.cancel(this.notificationTag, PLAYBACK_NOTIFICATION_ID);
 
         // Create base intent to launch activity from notification
         notificationIntent = new Intent(cordovaActivity, cordovaActivity.getClass());
@@ -142,7 +142,7 @@ public class LockScreenPlayer extends CordovaPlugin {
 
                 Log.d(TAG, "CordovaPlugin: load " + action);
 
-                this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+                this.notificationManager.cancel(this.notificationTag, PLAYBACK_NOTIFICATION_ID);
 
             } else{
                 Log.d(TAG, "CordovaPlugin: unknown action");
@@ -173,7 +173,7 @@ public class LockScreenPlayer extends CordovaPlugin {
             imageCover = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
         }
 
-        this.notificationManager.notify(PLAYBACK_NOTIFICATION_ID, buildNotification(
+        this.notificationManager.notify(this.notificationTag, PLAYBACK_NOTIFICATION_ID, buildNotification(
                 trackName,
                 trackName + " - " + artistName,
                 imageCover,
@@ -279,7 +279,7 @@ public class LockScreenPlayer extends CordovaPlugin {
      */
     @Override
     public void onNewIntent(Intent intent) {
-        this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+        this.notificationManager.cancel(this.notificationTag, PLAYBACK_NOTIFICATION_ID);
     }
 
     /**
@@ -287,7 +287,7 @@ public class LockScreenPlayer extends CordovaPlugin {
      */
     @Override
     public void onDestroy() {
-        this.notificationManager.cancel(PLAYBACK_NOTIFICATION_ID);
+        this.notificationManager.cancel(this.notificationTag, PLAYBACK_NOTIFICATION_ID);
     }
 
     /**
